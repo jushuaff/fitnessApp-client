@@ -1,25 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { UserProvider } from './context/UserContext';
+import { jwtDecode } from 'jwt-decode';  // Update the import here
+
+import AppNavbar from './components/AppNavbar';
+import Footer from './components/Footer';
+
+// Pages
+import Home from './pages/Home';
+import Workout from './pages/Workout';
+import Login from './pages/Login';
+import Logout from './pages/Logout';
+import Register from './pages/Register';
+import Error from './pages/Error';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [user, setUser] = useState({
+        email: null,
+    });
+
+    const unsetUser = () => {
+        localStorage.clear();
+        setUser({ email: null });
+    };
+
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (token) {
+            // Decode the JWT token to get user details
+            const decodedToken = jwtDecode(token);  // Correct function usage
+            setUser({
+                email: decodedToken.email,  // Assuming the email is stored in the token
+            });
+        } else {
+            setUser({
+                email: null,
+            });
+        }
+    }, [token]);
+
+    useEffect(() => {
+        console.log(user);
+        console.log(localStorage);
+    }, [user]);
+
+    return (
+        <UserProvider value={{ user, setUser, unsetUser }}>
+            <Router class="shadow-sm">
+                <AppNavbar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/register" element={<Register />} />
+                    {!token ? 
+                        <Route path="/login" element={<Login />} />
+                    : null}
+                    {token ? 
+                        <Route path="/workout" element={<Workout />} />
+                    : null}
+                    <Route path="/logout" element={<Logout />} />
+                    <Route path="*" element={<Error />} />
+                </Routes>
+                <Footer />
+            </Router>
+        </UserProvider>
+    );
 }
 
 export default App;
