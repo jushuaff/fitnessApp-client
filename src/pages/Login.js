@@ -5,8 +5,7 @@ import Swal from 'sweetalert2';
 import UserContext from '../context/UserContext';
 
 export default function Login() {
-
-    const { user, setUser } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isActive, setIsActive] = useState(false);
@@ -31,7 +30,9 @@ export default function Login() {
 
             if (data.access !== undefined) {
                 localStorage.setItem('token', data.access);
-                const details = await retrieveUserDetails(data.access);
+                
+                // Update user context with minimal details
+                setUser({ email });
 
                 setEmail('');
                 setPassword('');
@@ -42,7 +43,6 @@ export default function Login() {
                 });
 
                 navigate("/workout");
-
             } else {
                 Swal.fire({
                     title: "Authentication failed",
@@ -59,30 +59,6 @@ export default function Login() {
         }
     }
 
-    const retrieveUserDetails = async (token) => {
-        try {
-            const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/details`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            const data = await res.json();
-            setUser({
-                id: data.user._id,
-                email: data.user.email,
-            });
-
-            return data.user;
-        } catch (error) {
-            Swal.fire({
-                title: "An error occurred on retrieval",
-                icon: "error",
-                text: error.message
-            });
-        }
-    };
-
     useEffect(() => {
         if(email !== '' && password !== '') {
             setIsActive(true);
@@ -90,10 +66,6 @@ export default function Login() {
             setIsActive(false);
         }
     }, [email, password]);
-
-    if (user.email) {
-        return navigate("/workout");
-    }
 
     return (
         <>

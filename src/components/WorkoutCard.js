@@ -2,11 +2,8 @@ import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import UserContext from '../context/UserContext';
 
 export default function WorkoutCard({ workoutProp, onDelete }) {
-    const { user } = useContext(UserContext);
 
     if (!workoutProp) {
         return <div>No Workouts Available</div>;
@@ -82,10 +79,8 @@ export default function WorkoutCard({ workoutProp, onDelete }) {
                             icon: "success",
                             title: "Workout status updated to completed"
                         });
-                        
-                        // Update the workout status directly in the UI without calling onDelete
-                        // This assumes `workoutProp` is controlled from the parent component
-                        workoutProp.status = 'completed'; // Update status to completed
+                        // Notify parent component to refresh the workout list
+                        onDelete(id); // You might want to refresh or remove the card entirely
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -115,13 +110,13 @@ export default function WorkoutCard({ workoutProp, onDelete }) {
                 <Card.Text>{status}</Card.Text>
             </Card.Body>
             {/* Render action buttons only if the workout is not completed */}
-            {status !== "completed" && (
-                <Card.Footer className="d-flex justify-content-around">
-                    <Link className="btn btn-primary btn-sm" to={`/UpdateWorkout/${_id}`}>Update Workout</Link>
-                    <Button className="btn btn-danger btn-sm" onClick={() => deleteWorkout(_id)}>Delete</Button>
+            <Card.Footer className="d-flex justify-content-around">
+                <Link className="btn btn-primary btn-sm" to={`/update-workout/${_id}`}>Update Workout</Link>
+                <Button className="btn btn-danger btn-sm" onClick={() => deleteWorkout(_id)}>Delete</Button>
+                {status !== "completed" && (        
                     <Button className="btn btn-success btn-sm" onClick={() => completeWorkoutStatus(_id)}>Complete Workout</Button>
-                </Card.Footer>
-            )}
+                )}
+            </Card.Footer>
         </Card>
     );
 }

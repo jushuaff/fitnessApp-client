@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 // Pages
 import Home from './pages/Home';
 import Workout from './pages/Workout';
+import UpdateWorkout from './pages/UpdateWorkout';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Register from './pages/Register';
@@ -56,7 +57,10 @@ function App() {
                         <Route path="/login" element={<Login />} />
                     : null}
                     {token ? 
-                        <Route path="/workout" element={<Workout />} />
+                        <>
+                            <Route path="/workout" element={<Workout />} />
+                            <Route path="/update-workout/:workoutId" element={<UpdateWorkout />} />
+                        </>
                     : null}
                     <Route path="/logout" element={<Logout />} />
                     <Route path="*" element={<Error />} />
