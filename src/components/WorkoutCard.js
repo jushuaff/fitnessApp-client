@@ -1,5 +1,6 @@
 import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 import Swal from 'sweetalert2';
 import PropTypes from 'prop-types';
 
@@ -21,7 +22,7 @@ export default function WorkoutCard({ workoutProp, onDelete }) {
             cancelButtonText: 'No, cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`${process.env.REACT_APP_API_BASE_URL}/workouts/deleteWorkout/${id}`, {
+                fetch(`${API_BASE_URL}/workouts/deleteWorkout/${id}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export default function WorkoutCard({ workoutProp, onDelete }) {
             cancelButtonText: 'No, cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`${process.env.REACT_APP_API_BASE_URL}/workouts/completeWorkoutStatus/${id}`, {
+                fetch(`${API_BASE_URL}/workouts/completeWorkoutStatus/${id}`, {
                     method: 'PUT',
                     headers: {
                         "Content-Type": "application/json",

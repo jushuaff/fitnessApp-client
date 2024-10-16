@@ -48,7 +48,7 @@ function App() {
 
     return (
         <UserProvider value={{ user, setUser, unsetUser }}>
-            <Router class="shadow-sm">
+            <Router className="shadow-sm">
                 <AppNavbar />
                 <Routes>
                     <Route path="/" element={<Home />} />

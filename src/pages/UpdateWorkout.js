@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 import Swal from 'sweetalert2';
 
 export default function UpdateWorkout() {
@@ -15,7 +16,7 @@ export default function UpdateWorkout() {
 
     // Fetch the existing workout details when the component loads
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/workouts/getWorkout/${workoutId}`, {
+        fetch(`${API_BASE_URL}/workouts/getWorkout/${workoutId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +60,7 @@ export default function UpdateWorkout() {
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/workouts/updateWorkout/${workoutId}`, {
+        fetch(`${API_BASE_URL}/workouts/updateWorkout/${workoutId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import WorkoutCard from '../components/WorkoutCard'; // Import the WorkoutCard component
 import { Row, Col, Form, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 import UserContext from '../context/UserContext';
 
 export default function Workout() {
@@ -13,7 +14,7 @@ export default function Workout() {
 
     // Fetch workouts
     const fetchWorkouts = () => {
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/workouts/getMyWorkouts`, {
+        fetch(`${API_BASE_URL}/workouts/getMyWorkouts`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -37,7 +38,7 @@ export default function Workout() {
 
     // Handle workout addition
     const handleAddWorkout = () => {
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/workouts/addWorkout`, {
+        fetch(`${API_BASE_URL}/workouts/addWorkout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
